@@ -1,61 +1,64 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('AnimatedContainer Example'),
-        ),
-        body: Center(
-          child: AnimatedContainerDemo(),
-        ),
-      ),
+    return const MaterialApp(
+      home: AnimatedOpacityExample(),
     );
   }
 }
 
-class AnimatedContainerDemo extends StatefulWidget {
+class AnimatedOpacityExample extends StatefulWidget {
+  const AnimatedOpacityExample({super.key});
+
   @override
-  _AnimatedContainerDemoState createState() => _AnimatedContainerDemoState();
+  // ignore: library_private_types_in_public_api
+  _AnimatedOpacityExampleState createState() => _AnimatedOpacityExampleState();
 }
 
-class _AnimatedContainerDemoState extends State<AnimatedContainerDemo> {
-  bool _isLarge = false;
+class _AnimatedOpacityExampleState extends State<AnimatedOpacityExample> {
+  double _opacity = 1.0;
+
+  void _toggleOpacity() {
+    setState(() {
+      _opacity = _opacity == 1.0 ? 0.0 : 1.0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        AnimatedContainer(
-          width: _isLarge ? 200.0 : 100.0,
-          height: _isLarge ? 200.0 : 100.0,
-          color: _isLarge ? Colors.blue : Colors.red,
-          alignment: Alignment.center,
-          duration: Duration(seconds: 1),
-          curve: Curves.fastOutSlowIn,
-          child: Text(
-            'Tap me!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('AnimatedOpacity Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedOpacity(
+              opacity: _opacity,
+              duration: const Duration(seconds: 2),
+              child: Container(
+                width: 100.0,
+                height: 100.0,
+                color: Colors.blue,
+              ),
             ),
-          ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _toggleOpacity,
+              child: const Text('Toggle Opacity'),
+            ),
+          ],
         ),
-        SizedBox(height: 20.0),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _isLarge = !_isLarge;
-            });
-          },
-          child: Text('Animate'),
-        ),
-      ],
+      ),
     );
   }
 }
